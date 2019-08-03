@@ -1,10 +1,11 @@
 class PacManPlayer{
-  private float x = 12 * sc, y = 23 * sc;
+  public float x = 12 * sc, y = 23 * sc;
   private int dirLineX = 12, dirLineY = 23;
   private int dirX = -1, dirY = 0;
   private int newDirX, newDirY;
-  private float speed = 2.5; // math stuff ;) , 1.25 * 16 = sc
-  private int oldX = 7, oldY = 24;
+  private float speed = 2.5; // math stuff ;) , 2.5 * 8 = sc
+  private int oldX = 12, oldY = 23;
+  public int i, j;
 
   public void update(){
     if( a[ this.oldY ][ this.oldX ] != '-' )
@@ -12,22 +13,23 @@ class PacManPlayer{
 
     if( this.x % 20 == 0 && this.y % 20 == 0 ){
 
-      int i = (int)this.x / sc;
-      int j = (int)this.y / sc;
+      this.i = (int)this.x / sc;
+      this.j = (int)this.y / sc;
 
-      if( a[ j ][ i ] == '-' && i == 0){
+      
+      if( a[ this.j ][ this.i ] == '-' && this.i == 0){
         this.x = 27 * sc;
-        i = 27;
-      } else if( a[ j ][ i ] == '-' && i == 27){
+        this.i = 27;
+      } else if( a[ this.j ][ this.i ] == '-' && this.i == 27){
         this.x = 0;
-        i = 0;
+        this.i = 0;
       }
 
-      int newPositionX = i + this.newDirX;
-      int newPositionY = j + this.newDirY;
+      int newPositionX = this.i + this.newDirX;
+      int newPositionY = this.j + this.newDirY;
 
-      int nextPositionX = i + this.dirX;
-      int nextPositionY = j + this.dirY;
+      int nextPositionX = this.i + this.dirX;
+      int nextPositionY = this.j + this.dirY;
 
       if( a[ nextPositionY ][ nextPositionX ] == '1'){
         this.dirX = 0;
@@ -38,12 +40,12 @@ class PacManPlayer{
         this.dirX = this.newDirX;
         this.dirY = this.newDirY;
       }
-      if( a[ j ][ i ]  != '-')
-        a[ j ][ i ] = 'X';
+      if( a[ this.j ][ this.i ]  != '-')
+        a[ this.j ][ this.i ] = 'X';
       if( a[ this.oldY ][ this.oldX ] != '-' )
         a[ this.oldY ][ this.oldX ] = '0';
-      this.oldX = i;
-      this.oldY = j;
+      this.oldX = this.i;
+      this.oldY = this.j;
 
     }
 
@@ -56,8 +58,7 @@ class PacManPlayer{
   }
 
   private void show(){
-    strokeWeight(0);
-    stroke(15);
+    noStroke();
     fill(255, 247, 130);
     circle(this.x, this.y, 25);
   }
@@ -96,7 +97,7 @@ class PacManPlayer{
     stroke(255, 247, 130);
     line(this.x, this.y, this.dirLineX * sc, this.dirLineY * sc);
     
-    strokeWeight(0);
+    noStroke();
     fill(255, 247, 130);
     circle(this.dirLineX * sc, this.dirLineY * sc, 10);
   }
