@@ -1,6 +1,5 @@
 # <p align="center">PacMan</p>
 
-<<<<<<< HEAD
 <p align="center">
   <img width="400" src="https://i.postimg.cc/kMSnTSv5/Capture.png">
 </p>
@@ -21,8 +20,3 @@ I succeed adding the A* algorithm, I was using Gandalf to help me.
  * [GeeksForGeeks](https://www.geeksforgeeks.org)
 
 ###### Sighinau
-=======
-Rewriting all in Processing/Java.
-
-![alt text](https://i.postimg.cc/3wdF7BFW/pacman.png "Logo Title Text 1")
->>>>>>> a75c76a20ed3fe15338ea6f19aa71cc810376658
