@@ -3,6 +3,7 @@ class Cell{
   public boolean isWall = false;
   public float f = Float.MAX_VALUE, h, g;
   public Cell parent;
+  public boolean tempViz = false;
   Cell(int i, int j){
     this.i = i;
     this.j = j;

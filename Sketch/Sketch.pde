@@ -3,7 +3,11 @@ import java.util.ArrayList;
 
 PImage img, c;
 int sc = 20, rows, cols;
+
 Destroyer destroyer;
+Tricky tricky;
+Pinky pinky;
+
 PacManPlayer pacman;
 List< List<Cell> > array;
 List<Cell> path = new ArrayList<Cell>();
@@ -31,7 +35,15 @@ void setup() {
   }
 
   pacman = new PacManPlayer();
+
   destroyer = new Destroyer(20, 20);
+  destroyer.SetColor(239, 106, 106);
+
+  tricky = new Tricky(13 * sc, 11 * sc);
+  tricky.SetColor(87, 242, 176);
+
+  pinky = new Pinky(15 * sc, 11 * sc);
+  pinky.SetColor(164, 53, 229);
 
   rectMode(RADIUS);
 }
@@ -40,19 +52,16 @@ void draw() {
   background( 15 );
   image(c, 0, 0);
   translate(sc / 2, sc / 2);
-
-  drawPath();
+  destroyer.drawPath();
+  tricky.drawPath();
+  pinky.drawPath();
   drawCoins();
 
   pacman.update();
-  destroyer.show(200, 64, 120);
-  destroyer.update();
-}
 
-void drawPath(){
-  for(Cell c : path){
-    c.show(200, 50, 30);
-  }
+  destroyer.search();
+  tricky.search();
+  pinky.search();
 }
 
 void drawCoins(){

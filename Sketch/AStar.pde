@@ -4,7 +4,7 @@ void AStar(Cell start, Cell end){
   List<Cell> openList = new ArrayList<Cell>();
   List<Cell> closedList = new ArrayList<Cell>();
   path = new ArrayList<Cell>();
-  
+
   resetParents();
 
   openList.add( start );

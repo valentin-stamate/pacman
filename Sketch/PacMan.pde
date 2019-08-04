@@ -6,17 +6,23 @@ class PacManPlayer{
   private float speed = 2.5; // math stuff ;) , 2.5 * 8 = sc
   private int oldX = 12, oldY = 23;
   public int i, j;
+  public Cell oldPosition = array.get(23).get(12);
 
   public void update(){
     if( a[ this.oldY ][ this.oldX ] != '-' )
       a[ this.oldY ][ this.oldX ] = 'X';
+
+    if(frameCount % 100 == 0){
+      // update the old position every 1 second for Tricky
+      this.oldPosition = array.get(j).get(i);
+    }
 
     if( this.x % 20 == 0 && this.y % 20 == 0 ){
 
       this.i = (int)this.x / sc;
       this.j = (int)this.y / sc;
 
-      
+
       if( a[ this.j ][ this.i ] == '-' && this.i == 0){
         this.x = 27 * sc;
         this.i = 27;
@@ -49,8 +55,6 @@ class PacManPlayer{
 
     }
 
-    this.DirectionLine();
-
     this.x += this.dirX * this.speed;
     this.y += this.dirY * this.speed;
 
@@ -66,40 +70,6 @@ class PacManPlayer{
   public void changeDir(int dirX, int dirY){
     this.newDirX = dirX;
     this.newDirY = dirY;
-  }
-
-  private void DirectionLine(){
-
-    if( this.x % sc == 0 && this.y % sc == 0 ){
-      
-      this.dirLineX = (int)this.x / sc;
-      this.dirLineY = (int)this.y / sc;
-
-      if( this.dirX == 0 && this.dirY != 0){
-
-        while( a[ this.dirLineY ][ this.dirLineX ] != '1' && a[ this.dirLineY ][ this.dirLineX ] != '-')
-          this.dirLineY += this.dirY;
-        this.dirLineY -= this.dirY;
-
-      }
-
-      if( this.dirY == 0 && this.dirX != 0 ){
-
-        while( a[ this.dirLineY ][ this.dirLineX ] != '1' && a[ this.dirLineY ][ this.dirLineX ] != '-' )
-          this.dirLineX += this.dirX;
-        this.dirLineX -= this.dirX;
-
-      }
-
-    }
-
-    strokeWeight(4);
-    stroke(255, 247, 130);
-    line(this.x, this.y, this.dirLineX * sc, this.dirLineY * sc);
-    
-    noStroke();
-    fill(255, 247, 130);
-    circle(this.dirLineX * sc, this.dirLineY * sc, 10);
   }
 
 }
