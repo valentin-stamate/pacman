@@ -1,58 +1,80 @@
-class PacManPlayer{
+class PacMan{
   public float x = 12 * sc, y = 23 * sc;
   private int dirLineX = 12, dirLineY = 23;
   private int dirX = -1, dirY = 0;
   private int newDirX, newDirY;
-  private float speed = 2.5; // math stuff ;) , 2.5 * 8 = sc
-  private int oldX = 12, oldY = 23;
+  private float speed = 2.5; // math stuff , 2.5 * 8 = sc
+  
   public int i, j;
   public Cell oldPosition = array.get(23).get(12);
+  public boolean isInvincible = false;
+  private int countDown = 600;
+  public Cell currentCell = array.get(23).get(12);
 
   public void update(){
-    if( a[ this.oldY ][ this.oldX ] != '-' )
-      a[ this.oldY ][ this.oldX ] = 'X';
 
     if(frameCount % 100 == 0){
-      // update the old position every 1 second for Tricky
-      this.oldPosition = array.get(j).get(i);
+      // update the old position every 1.40 second for Tricky
+      this.oldPosition = this.currentCell;
     }
 
     if( this.x % 20 == 0 && this.y % 20 == 0 ){
 
-      this.i = (int)this.x / sc;
-      this.j = (int)this.y / sc;
+      this.j = (int)this.x / sc;
+      this.i = (int)this.y / sc;
 
+      // for food
+      if(a[this.i][this.j] != '-')
+        a[this.i][this.j] = '0';
 
-      if( a[ this.j ][ this.i ] == '-' && this.i == 0){
+      if( a[ this.i ][ this.j ] == '-' && this.j == 0){
         this.x = 27 * sc;
-        this.i = 27;
-      } else if( a[ this.j ][ this.i ] == '-' && this.i == 27){
+        this.j = 27;
+      } else if( a[ this.i ][ this.j ] == '-' && this.j == 27){
         this.x = 0;
-        this.i = 0;
+        this.j = 0;
       }
 
-      int newPositionX = this.i + this.newDirX;
-      int newPositionY = this.j + this.newDirY;
+      int newPositionX = this.j + this.newDirX;
+      int newPositionY = this.i + this.newDirY;
 
-      int nextPositionX = this.i + this.dirX;
-      int nextPositionY = this.j + this.dirY;
+      int nextPositionX = this.j + this.dirX;
+      int nextPositionY = this.i + this.dirY;
 
       if( a[ nextPositionY ][ nextPositionX ] == '1'){
         this.dirX = 0;
         this.dirY = 0;
       }
 
-      if( a[ newPositionY ][ newPositionX ] != '1' ){
-        this.dirX = this.newDirX;
-        this.dirY = this.newDirY;
-      }
-      if( a[ this.j ][ this.i ]  != '-')
-        a[ this.j ][ this.i ] = 'X';
-      if( a[ this.oldY ][ this.oldX ] != '-' )
-        a[ this.oldY ][ this.oldX ] = '0';
-      this.oldX = this.i;
-      this.oldY = this.j;
+      // for a little bug when teleport
+      try{
+        if( a[ newPositionY ][ newPositionX ] != '1' ){
+          this.dirX = this.newDirX;
+          this.dirY = this.newDirY;
 
+          this.j = newPositionX;
+          this.i = newPositionY;
+        }
+      }
+      catch(Exception e){}
+
+      this.currentCell = array.get(this.i).get(this.j);
+
+      if( this.checkBonus() ){
+        println("pacman isInvincible");
+        this.isInvincible = true;
+        this.countDown = 600;
+      }
+
+    }
+
+    if(this.isInvincible){
+      if(this.countDown != 0 ){
+        this.countDown --;
+      } else {
+        println("pacman not invincible");
+        this.isInvincible = false;
+      }
     }
 
     this.x += this.dirX * this.speed;
@@ -70,6 +92,18 @@ class PacManPlayer{
   public void changeDir(int dirX, int dirY){
     this.newDirX = dirX;
     this.newDirY = dirY;
+  }
+
+  private boolean checkBonus(){
+    if(a[this.i][this.j] == '3'){
+      // i don't know what i am doing
+      destroyer.isAffectedBy = true;
+      tricky.isAffectedBy = true;
+      pinky.isAffectedBy = true;
+
+      return true;
+    }
+    return false;
   }
 
 }
