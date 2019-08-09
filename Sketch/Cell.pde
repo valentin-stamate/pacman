@@ -1,9 +1,11 @@
 class Cell{
   public int i, j;
-  public boolean isWall = false;
   public float f = Float.MAX_VALUE, h, g;
   public Cell parent;
+
+  public boolean isWall = false;
   public boolean tempViz = false;
+
   Cell(int i, int j){
     this.i = i;
     this.j = j;

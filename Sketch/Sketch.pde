@@ -4,18 +4,20 @@ import java.util.ArrayList;
 PImage img, c;
 int sc = 20, rows, cols;
 
-Destroyer destroyer;
-Tricky tricky;
+Blinky blinky;
 Pinky pinky;
+Inky inky;
+Clyde clyde;
 
 PacMan pacman;
+
 List< List<Cell> > array;
-List<Cell> path = new ArrayList<Cell>();
+List<Cell> path, food, bonusFood;
 
 void setup() {
-  size( 560 , 620 );
-  background( 15 );
-  frameRate( 60 );
+  size(560, 620);
+  background(15);
+  frameRate(60);
 
   img = loadImage("PacmanBoard.png");
   image(img, 0, 0);
@@ -25,25 +27,34 @@ void setup() {
   cols = width / sc;
 
   array = new ArrayList< List<Cell> >();
+  path = new ArrayList<Cell>();
+  food = new ArrayList<Cell>();
+  bonusFood = new ArrayList<Cell>();
+
   for(int i = 0; i < rows; i ++){
     array.add( new ArrayList<Cell>() );
     for(int j = 0; j < cols; j ++){
       array.get(i).add( new Cell(i, j) );
       if( a[i][j] == '1' )
         array.get(i).get(j).isWall = true;
+      else if(a[i][j] == '2')
+        food.add( array.get(i).get(j) );
+      else if(a[i][j] == '3')
+        bonusFood.add( array.get(i).get(j) );
     }
   }
 
   pacman = new PacMan();
 
-  destroyer = new Destroyer(20, 20);
-  destroyer.SetColor(239, 106, 106);
+  blinky = new Blinky(13, 13);
+  pinky = new Pinky(14, 13);
+  inky = new Inky(14, 12);
+  clyde = new Clyde(14, 14);
 
-  tricky = new Tricky(13 * sc, 11 * sc);
-  tricky.SetColor(87, 242, 176);
-
-  pinky = new Pinky(15 * sc, 11 * sc);
-  pinky.SetColor(164, 53, 229);
+  blinky.SetColor(255, 95, 95);
+  pinky.SetColor(255, 184, 255);
+  inky.SetColor(0, 255, 255);
+  clyde.SetColor(255, 184, 81);
 
   rectMode(RADIUS);
 }
@@ -52,98 +63,99 @@ void draw() {
   background( 15 );
   image(c, 0, 0);
   translate(sc / 2, sc / 2);
-  destroyer.drawPath();
-  tricky.drawPath();
+
+  blinky.drawPath();
   pinky.drawPath();
+  inky.drawPath();
+  clyde.drawPath();
+
   drawCoins();
 
   pacman.update();
 
   if(pacman.isInvincible){
-    if(!destroyer.isWeak && !destroyer.isRecovering && destroyer.isAffectedBy){
-      destroyer.makeWeak();
-    }
-    if(!tricky.isWeak && !tricky.isRecovering && tricky.isAffectedBy){
-      tricky.makeWeak();
+    if(!blinky.isWeak && !blinky.isRecovering && blinky.isAffectedBy){
+      blinky.makeWeak();
     }
     if(!pinky.isWeak && !pinky.isRecovering && pinky.isAffectedBy){
       pinky.makeWeak();
     }
-  } else {
-    if(destroyer.isWeak){
-      destroyer.makeNormal();
+
+    if(!inky.isWeak && !inky.isRecovering && inky.isAffectedBy){
+      inky.makeWeak();
     }
-    if(tricky.isWeak){
-      tricky.makeNormal();
+    if(!clyde.isWeak && !clyde.isRecovering && clyde.isAffectedBy){
+      clyde.makeWeak();
+    }
+  } else {
+    if(blinky.isWeak){
+      blinky.makeNormal();
     }
     if(pinky.isWeak){
       pinky.makeNormal();
     }
+    if(inky.isWeak){
+      inky.makeNormal();
+    }
+    if(clyde.isWeak){
+      clyde.makeNormal();
+    }
   }
 
-  // check collision with pacman
-  if( Math.abs(pacman.x - destroyer.x) < sc + 10 && Math.abs(pacman.y - destroyer.y) < sc + 10 ) {
-    if(pacman.isInvincible && destroyer.isAffectedBy){
-      destroyer.retreat();
+  //check collision with pacman
+  if( Math.abs(pacman.x - blinky.x) < sc + 10 && Math.abs(pacman.y - blinky.y) < sc + 10 ) {
+    if(pacman.isInvincible && blinky.isAffectedBy){
+      blinky.retreat();
     } else {
-      print("Game OverDEST");
+      print("Caught By Blinky");
       noLoop();
     }
   }
-  if( Math.abs(pacman.x - tricky.x) < sc + 10 && Math.abs(pacman.y - tricky.y) < sc + 10 ) {
-    if(pacman.isInvincible && tricky.isAffectedBy){
-      tricky.retreat();
-    } else {
-      print("Game OverTRY");
-      noLoop();
-    }
-  }
+
   if( Math.abs(pacman.x - pinky.x) < sc + 10 && Math.abs(pacman.y - pinky.y) < sc + 10 ) {
     if(pacman.isInvincible && pinky.isAffectedBy){
       pinky.retreat();
     } else {
-      print("Game OverPINK");
+      print("Caught By Pinky");
       noLoop();
     }
   }
 
-  destroyer.search();
-  tricky.search();
+  if( Math.abs(pacman.x - inky.x) < sc + 10 && Math.abs(pacman.y - inky.y) < sc + 10 ) {
+    if(pacman.isInvincible && inky.isAffectedBy){
+      inky.retreat();
+    } else {
+      print("Caught By Inky");
+      noLoop();
+    }
+  }
+  if( Math.abs(pacman.x - clyde.x) < sc + 10 && Math.abs(pacman.y - clyde.y) < sc + 10 ) {
+    if(pacman.isInvincible && clyde.isAffectedBy){
+      clyde.retreat();
+    } else {
+      print("Caught By Clyde");
+      noLoop();
+    }
+  }
+
+  blinky.search();
   pinky.search();
+  inky.search();
+  clyde.search();
 }
 
 void drawCoins(){
   strokeWeight(0);
   stroke(15);
-  fill(255, 246, 107);
-  int score = 0;
-  for(int i = 1; i < 30; i++){
-    for(int j = 1; j < 28; j++){
-      if(a[ i ][ j ] == '2'){
-        circle( j * sc, i * sc, 8);
-        score++;
-      } else
-      if(a[i][j] == '3'){
-        circle(j * sc, i * sc, 12);
-        score++;
-      }
-    }
-  }
-  if(score == 0){
-    println("");
-    print("You win");
-    noLoop();
-  }
-}
+  fill(255, 184, 151);
 
-void showMatrix(){
-  for(int i = 0; i < 31; i++){
-    for(int j = 0; j < 28; j++){
-      boolean b = array.get(i).get(j).isWall;
-      if(b)
-        print(1);
-      else print(0);
-    }println();
+  for(Cell c : food)
+    circle(c.j * sc, c.i * sc, 6);
+  for(Cell c : bonusFood)
+   circle(c.j * sc, c.i * sc, 16);
+  if(food.size() == 0 && bonusFood.size() == 0){
+    println("\nYou win");
+    noLoop();
   }
 }
 

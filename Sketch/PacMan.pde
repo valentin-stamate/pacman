@@ -1,31 +1,28 @@
 class PacMan{
   public float x = 12 * sc, y = 23 * sc;
   private int dirLineX = 12, dirLineY = 23;
-  private int dirX = -1, dirY = 0;
+  public int dirX = -1, dirY = 0;
   private int newDirX, newDirY;
   private float speed = 2.5; // math stuff , 2.5 * 8 = sc
-  
+
   public int i, j;
-  public Cell oldPosition = array.get(23).get(12);
   public boolean isInvincible = false;
   private int countDown = 600;
   public Cell currentCell = array.get(23).get(12);
 
   public void update(){
 
-    if(frameCount % 100 == 0){
-      // update the old position every 1.40 second for Tricky
-      this.oldPosition = this.currentCell;
-    }
-
     if( this.x % 20 == 0 && this.y % 20 == 0 ){
 
-      this.j = (int)this.x / sc;
       this.i = (int)this.y / sc;
+      this.j = (int)this.x / sc;
 
-      // for food
-      if(a[this.i][this.j] != '-')
-        a[this.i][this.j] = '0';
+      food.remove( array.get(this.i).get(this.j) );
+
+      if( this.checkBonus() ){
+        this.isInvincible = true;
+        this.countDown = 600;
+      }
 
       if( a[ this.i ][ this.j ] == '-' && this.j == 0){
         this.x = 27 * sc;
@@ -51,20 +48,11 @@ class PacMan{
         if( a[ newPositionY ][ newPositionX ] != '1' ){
           this.dirX = this.newDirX;
           this.dirY = this.newDirY;
-
-          this.j = newPositionX;
-          this.i = newPositionY;
         }
       }
       catch(Exception e){}
 
       this.currentCell = array.get(this.i).get(this.j);
-
-      if( this.checkBonus() ){
-        println("pacman isInvincible");
-        this.isInvincible = true;
-        this.countDown = 600;
-      }
 
     }
 
@@ -72,7 +60,7 @@ class PacMan{
       if(this.countDown != 0 ){
         this.countDown --;
       } else {
-        println("pacman not invincible");
+        //println("PacMan Is Normal");
         this.isInvincible = false;
       }
     }
@@ -85,7 +73,7 @@ class PacMan{
 
   private void show(){
     noStroke();
-    fill(255, 247, 130);
+    fill(255, 255, 0);
     circle(this.x, this.y, 25);
   }
 
@@ -95,12 +83,13 @@ class PacMan{
   }
 
   private boolean checkBonus(){
-    if(a[this.i][this.j] == '3'){
-      // i don't know what i am doing
-      destroyer.isAffectedBy = true;
-      tricky.isAffectedBy = true;
+    if( bonusFood.contains( array.get(this.i).get(this.j) ) ){
+      blinky.isAffectedBy = true;
       pinky.isAffectedBy = true;
-
+      inky.isAffectedBy = true;
+      clyde.isAffectedBy = true;
+      bonusFood.remove( array.get(this.i).get(this.j) );
+      //println("PacMan Is Invincible");
       return true;
     }
     return false;

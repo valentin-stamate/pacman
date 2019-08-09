@@ -1,9 +1,7 @@
-// Pinky is the one who try to ambush pacman
-// TODO work on pinky
-class Pinky extends Ghost{
-  private int newSearch = 8;
-  Pinky(int i, int j){
-    super(i, j);
+// Inky is dummy
+class Inky extends Ghost{
+  Inky(int x, int y){
+    super(x, y);
   }
 
   public void search() {
@@ -12,13 +10,10 @@ class Pinky extends Ghost{
       super.i = (int)super.y / sc;
       super.j = (int)super.x / sc;
 
-      this.newSearch --;
-
       super.currentCell = array.get(super.i).get(super.j);
 
       // when is weak and can be eaten by pacman it choses a random cell
       if( (super.isWeak || super.isRecovering ) && super.isAffectedBy ){
-        this.newSearch = 1;
 
         if(super.searchingList.size() <= 2 ){
           if(super.isWeak){
@@ -30,17 +25,22 @@ class Pinky extends Ghost{
       }
       else {
         // here is the specific behaviour
-        if(this.newSearch == 0){
-          super.cellToFollow = super.getCellInFrontOf(6);
-          this.newSearch = 8;
+        int possibleI = 2 * pacman.i - blinky.i;
+        int possibleJ = 2 * pacman.j - blinky.j;
+        // for the explanation of what he follows search it on Google
+        try{
+          if( !array.get(possibleI).get(possibleJ).isWall )
+            super.cellToFollow = array.get(possibleI).get(possibleJ);
+        } catch(Exception e){
+          if(super.searchingList.size() <= 2)
+            super.cellToFollow = super.getRandomCell();
         }
       }
 
-      AStar(super.currentCell, super.cellToFollow);
+      AStar( super.currentCell, super.cellToFollow );
       super.searchingList = path;
 
     }
     super.update();
   }
-
 }

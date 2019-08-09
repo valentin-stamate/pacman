@@ -3,42 +3,35 @@ import java.util.List;
 
 class Ghost {
   public float x, y;
-  private List<Cell> searchingList;
-  private int dirX = 1, dirY = 0;
+  public int i, j;
   private float speed = 2.5;
-  private int i, j;
+  private int dirX = 1, dirY = 0;
   private int r, g, b;
-  private Cell cellToFollow;
-  private List<Cell> homeCells;
-  private Cell currentCell;
+  private Cell currentCell, cellToFollow;
+  private List<Cell> searchingList, ghostHouseCells;
 
   public boolean isWeak = false;
   public boolean isRecovering = false;
-
   public boolean isAffectedBy = false;
-
-  // the weak time is controled by pacman.isInvincible
   private int recoveringCountDowm = 720;// 12 sec
 
-  Ghost(int x, int y){
-    this.x = x;
-    this.y = y;
+
+  Ghost(int i, int j){
+    this.x = j * sc;
+    this.y = i * sc;
     this.searchingList = new ArrayList<Cell>();
     this.cellToFollow = this.getRandomCell();
-    this.homeCells = new ArrayList<Cell>();
+    this.ghostHouseCells = new ArrayList<Cell>();
 
-    for(int i = 13; i <= 15; i++){
-      for(int j = 11; j <= 16; j ++){
-        this.homeCells.add( array.get(i).get(j) );
+    for(int k = 13; k <= 15; k++){
+      for(int l = 11; l <= 16; l ++){
+        this.ghostHouseCells.add( array.get(k).get(l) );
       }
     }
   }
 
   private void update(){
     if(this.x % sc == 0 && this.y % sc == 0){
-      //search is called first so it's irrelevant
-      // i = (int)this.y / sc;
-      // j = (int)this.x / sc;
 
       Cell up = null, left = null, down = null, right = null;
       try{
@@ -79,9 +72,8 @@ class Ghost {
 
     }
 
-    // for a bug, if not i think there is a 50% chance
     if(this.x % 2.5 == 0 && this.y % 2.5 == 0){
-      if( (this.isWeak || this.isRecovering) && this.isAffectedBy){// TODO
+      if( (this.isWeak || this.isRecovering) && this.isAffectedBy){
         this.speed = 1.25;
       } else{
         this.speed = 2.5;
@@ -90,7 +82,7 @@ class Ghost {
 
     if(this.isRecovering){
       if(this.recoveringCountDowm == 0){
-        println("stops recovering");
+        //println("Stop Recovering");
         this.recoveringCountDowm = 720;
         this.isRecovering = false;
         this.isAffectedBy = false;
@@ -122,7 +114,7 @@ class Ghost {
 
   public void makeWeak(){
     if(!this.isWeak && this.isAffectedBy){
-      println("ghost weak");
+      //println("Ghost Weak");
       this.cellToFollow = this.getRandomCell();
       this.isWeak = true;
     }
@@ -130,7 +122,7 @@ class Ghost {
 
   public void makeNormal(){
     if(this.isWeak){
-      println("ghost normal");
+      //println("Ghost Normal");
       this.isWeak = false;
       this.isAffectedBy = false;
     }
@@ -138,10 +130,10 @@ class Ghost {
 
   public void retreat(){
     if(!this.isRecovering && this.isAffectedBy){
-      println("ghost retreat");
+      //println("Ghost Retreat");
       this.isRecovering = true;
       this.isWeak = false;
-      this.cellToFollow = this.getRandomCellFromHome();
+      this.cellToFollow = this.getRandomCellFromHouse();
     }
   }
 
@@ -166,6 +158,7 @@ class Ghost {
       }
       line(current.x , current.y , next.x , next.y );
     }
+
   }
 
   private Cell getRandomCell(){
@@ -180,9 +173,57 @@ class Ghost {
     return c;
   }
 
-  private Cell getRandomCellFromHome(){
-    int n = (int)random(0, this.homeCells.size());
-    return this.homeCells.get(n);
+  private Cell getRandomCellFromHouse(){
+    int n = (int)random(0, this.ghostHouseCells.size());
+    return this.ghostHouseCells.get(n);
+  }
+
+  private Cell getCellInFrontOf(int n){
+    List<Cell> positions = new ArrayList<Cell>();
+    int i = pacman.i + pacman.dirY;
+    int j = pacman.j + pacman.dirX;
+
+    Cell initial = array.get(pacman.i).get(pacman.j);
+    Cell root = array.get(i).get(j);
+    Cell c = null;
+
+    for(int l = 1; l <= n; l ++){
+      positions.clear();
+      try{
+        c = array.get(root.i - 1).get(root.j);
+        if(!c.isWall)
+          positions.add( c );
+      } catch (Exception e){}
+      try{
+        c = array.get(root.i).get(root.j - 1);
+        if(!c.isWall)
+          positions.add( c );
+      } catch (Exception e){}
+      try{
+        c = array.get(root.i + 1).get(root.j);
+        if(!c.isWall)
+          positions.add( c );
+      } catch (Exception e){}
+      try{
+        c = array.get(root.i).get(root.j + 1);
+        if(!c.isWall)
+          positions.add( c );
+      } catch (Exception e){}
+
+      positions.remove(initial);
+      initial = root;
+
+      int x = (int)random(0, positions.size());
+      try{
+        root = positions.get(x);
+      } catch(Exception e){
+        root = this.getRandomCell();
+        break;
+      }
+    }
+    // fill(255, 0, 0);
+    // rect(root.j * sc, root.i * sc, sc, sc);
+    return root;
   }
 
 }
