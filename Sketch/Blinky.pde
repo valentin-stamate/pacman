@@ -30,7 +30,7 @@ class Blinky extends Ghost {
         super.cellToFollow = pacman.currentCell;
       }
 
-      AStar( super.currentCell, super.cellToFollow );
+      aStar( super.currentCell, super.cellToFollow );
       super.searchingList = path;
 
     }

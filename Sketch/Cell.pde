@@ -1,10 +1,10 @@
 class Cell{
-  public int i, j;
-  public float f = Float.MAX_VALUE, h, g;
-  public Cell parent;
+  private int i, j;
+  private float f = Float.MAX_VALUE, h, g;
+  private Cell parent;
 
-  public boolean isWall = false;
-  public boolean tempViz = false;
+  private boolean isWall = false;
+  private boolean tempViz = false;
 
   Cell(int i, int j){
     this.i = i;

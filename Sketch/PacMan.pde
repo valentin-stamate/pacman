@@ -1,14 +1,14 @@
 class PacMan{
-  public float x = 12 * sc, y = 23 * sc;
+  private float x = 12 * sc, y = 23 * sc;
   private int dirLineX = 12, dirLineY = 23;
-  public int dirX = -1, dirY = 0;
+  private int dirX = -1, dirY = 0;
   private int newDirX, newDirY;
   private float speed = 2.5; // math stuff , 2.5 * 8 = sc
 
-  public int i, j;
-  public boolean isInvincible = false;
+  private int i, j;
+  private boolean isInvincible = false;
   private int countDown = 600;
-  public Cell currentCell = array.get(23).get(12);
+  private Cell currentCell = array.get(23).get(12);
 
   public void update(){
 

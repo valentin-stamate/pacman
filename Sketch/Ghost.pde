@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Ghost {
-  public float x, y;
-  public int i, j;
+  private float x, y;
+  private int i, j;
   private float speed = 2.5;
   private int dirX = 1, dirY = 0;
   private int r, g, b;
@@ -14,7 +14,6 @@ class Ghost {
   public boolean isRecovering = false;
   public boolean isAffectedBy = false;
   private int recoveringCountDowm = 720;// 12 sec
-
 
   Ghost(int i, int j){
     this.x = j * sc;
@@ -226,4 +225,19 @@ class Ghost {
     return root;
   }
 
+  public float getX() {
+    return this.x;
+  }
+
+  public float getY() {
+    return  this.y;
+  }
+
+  public int getI() {
+    return this.i;
+  }
+
+  public int getJ() {
+    return this.j;
+  }
 }

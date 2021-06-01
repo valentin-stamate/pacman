@@ -35,7 +35,7 @@ class Clyde extends Ghost {
         }
       }
 
-      AStar( super.currentCell, super.cellToFollow );
+      aStar( super.currentCell, super.cellToFollow );
       super.searchingList = path;
 
     }

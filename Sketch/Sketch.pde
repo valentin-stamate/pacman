@@ -103,7 +103,7 @@ void draw() {
   }
 
   //check collision with pacman
-  if( Math.abs(pacman.x - blinky.x) < sc + 10 && Math.abs(pacman.y - blinky.y) < sc + 10 ) {
+  if( Math.abs(pacman.x - blinky.getX()) < sc + 10 && Math.abs(pacman.y - blinky.getY()) < sc + 10 ) {
     if(pacman.isInvincible && blinky.isAffectedBy){
       blinky.retreat();
     } else {
@@ -112,7 +112,7 @@ void draw() {
     }
   }
 
-  if( Math.abs(pacman.x - pinky.x) < sc + 10 && Math.abs(pacman.y - pinky.y) < sc + 10 ) {
+  if( Math.abs(pacman.x - pinky.getX()) < sc + 10 && Math.abs(pacman.y - pinky.getY()) < sc + 10 ) {
     if(pacman.isInvincible && pinky.isAffectedBy){
       pinky.retreat();
     } else {
@@ -121,7 +121,7 @@ void draw() {
     }
   }
 
-  if( Math.abs(pacman.x - inky.x) < sc + 10 && Math.abs(pacman.y - inky.y) < sc + 10 ) {
+  if( Math.abs(pacman.x - inky.getX()) < sc + 10 && Math.abs(pacman.y - inky.getY()) < sc + 10 ) {
     if(pacman.isInvincible && inky.isAffectedBy){
       inky.retreat();
     } else {
@@ -129,7 +129,7 @@ void draw() {
       noLoop();
     }
   }
-  if( Math.abs(pacman.x - clyde.x) < sc + 10 && Math.abs(pacman.y - clyde.y) < sc + 10 ) {
+  if( Math.abs(pacman.x - clyde.getX()) < sc + 10 && Math.abs(pacman.y - clyde.getY()) < sc + 10 ) {
     if(pacman.isInvincible && clyde.isAffectedBy){
       clyde.retreat();
     } else {

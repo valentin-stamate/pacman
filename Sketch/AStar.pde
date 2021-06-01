@@ -1,6 +1,6 @@
 
 Cell q = null;
-void AStar(Cell start, Cell end){
+void aStar(Cell start, Cell end){
   List<Cell> openList = new ArrayList<Cell>();
   List<Cell> closedList = new ArrayList<Cell>();
   path = new ArrayList<Cell>();

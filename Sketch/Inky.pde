@@ -25,8 +25,8 @@ class Inky extends Ghost{
       }
       else {
         // here is the specific behaviour
-        int possibleI = 2 * pacman.i - blinky.i;
-        int possibleJ = 2 * pacman.j - blinky.j;
+        int possibleI = 2 * pacman.i - blinky.getI();
+        int possibleJ = 2 * pacman.j - blinky.getJ();
         // for the explanation of what he follows search it on Google
         try{
           if( !array.get(possibleI).get(possibleJ).isWall )
@@ -37,7 +37,7 @@ class Inky extends Ghost{
         }
       }
 
-      AStar( super.currentCell, super.cellToFollow );
+      aStar( super.currentCell, super.cellToFollow );
       super.searchingList = path;
 
     }
